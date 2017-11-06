@@ -158,6 +158,7 @@ class choraleModel(object):
 
             saver = tf.train.Saver()
             sess.run(tf.global_variables_initializer())
+
             train_writer = tf.summary.FileWriter('~.', sess.graph)
 
             f = open('training_results.txt', 'w')
@@ -172,6 +173,8 @@ class choraleModel(object):
                     print("step %d, training cost %g"%(i, train_accuracy))
                     f.write("step %d, training cost %g\n"%(i, train_accuracy))
                 train_step.run(feed_dict={batch: inputBatch, modelInput:inputModelInput})
+
+                print(sess.graph is not None)
 
                 merged = tf.summary.merge_all()
                 print(merged)

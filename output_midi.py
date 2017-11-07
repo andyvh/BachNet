@@ -61,7 +61,7 @@ def StateMatrixtoMidi(StateMatrix):
     eot = midi.EndOfTrackEvent(tick=len(StateMatrix))
     track.append(eot)
 
-    print(pattern)
+    # print(pattern)
 
     localtime   = timet.localtime()
     timeString  = timet.strftime("%m-%d %H:%M:%S", localtime)

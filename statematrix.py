@@ -95,7 +95,7 @@ def filesToDict(path):
     return matDict
 
 def main():
-    path = "./OneDataset/"
+    path = "./LDataset/"
     matDict = {}
     dirs = os.listdir(path)
 
@@ -104,6 +104,8 @@ def main():
         if len(statematrix) > batch_len:
             matDict[path+str(file)] = statematrix
             # print(matDict[path+str(file)])
+            # f = open('StateMatrixData/songText.txt', 'w')
+            # f.write(str(matDict[path+str(file)]))
 
     dataFile = open('StateMatrixData/songDict.txt', 'wb')
     pickle.dump(matDict, dataFile, pickle.HIGHEST_PROTOCOL)
@@ -118,15 +120,15 @@ if __name__ == '__main__':
     # dataFile = open('data.txt', 'wb')
     # dataJSON = open('dataJSON.json', 'wb')
     #
-    # statematrix = midiToStatematrix(path+"chorales_003604b2_(c)greentree(1).mid")
+    statematrix = midiToStatematrix(path+"chorales_003604b2_(c)greentree(1).mid")
 
-    for file in dirs:
-        statematrix = midiToStatematrix(path+str(file))
-        if len(statematrix) > batch_len:
-            matDict[path+str(file)] = statematrix
+    # for file in dirs:
+    #     statematrix = midiToStatematrix(path+str(file))
+    #     if len(statematrix) > batch_len:
+    #         matDict[path+str(file)] = statematrix
             # print(matDict[path+str(file)])
 
-    # matDict["test"] = statematrix
+    matDict["test"] = statematrix
     # json.dump(matDict, dataJSON)
     # dataJSON.close()
     dataFile = open('StateMatrixData/songDict.txt', 'wb')

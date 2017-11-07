@@ -4,6 +4,7 @@ from train_model import getModelInputs, batchToVectors, batch_len, batch_width, 
 import numpy as numpy
 import tflearn as tflearn
 import json
+import pickle
 
 
 numpy.set_printoptions(threshold=numpy.nan)
@@ -79,7 +80,7 @@ class choraleModel(object):
 
     def __init__(self, is_training, timeNeurons, timeLayers, noteNeurons, noteLayers, dropout):
 
-        iterations = 1000;
+        iterations = 5000;
 
         with tf.Session() as sess:
 
@@ -172,14 +173,12 @@ class choraleModel(object):
                     train_accuracy = cost.eval(feed_dict={batch: inputBatch, modelInput:inputModelInput})
                     print("step %d, training cost %g"%(i, train_accuracy))
                     f.write("step %d, training cost %g\n"%(i, train_accuracy))
-                train_step.run(feed_dict={batch: inputBatch, modelInput:inputModelInput})
+                # train_step.run(feed_dict={batch: inputBatch, modelInput:inputModelInput})
+                train_step.run({batch: inputBatch, modelInput:inputModelInput})
 
-                print(sess.graph is not None)
-
-                merged = tf.summary.merge_all()
-                print(merged)
-                print(i)
-                train_writer.add_summary(merged,i)
+                # merged = tf.summary.merge_all()
+                # print(merged)
+                # train_writer.add_summary(tf.summary.merge_all(),i)
 
 
 
@@ -221,9 +220,12 @@ class choraleModel(object):
             matDict = dict()
             matDict["test"] = song.tolist()
 
-            dataJSON = open('StateMatrixData/dataJSON.json', 'w')
-            json.dump(matDict, dataJSON)
-            dataJSON.close()
+            # dataJSON = open('StateMatrixData/dataJSON.json', 'w')
+            # json.dump(matDict, dataJSON)
+            # dataJSON.close()
+            dataFile = open('StateMatrixData/newSongDict.txt', 'wb')
+            pickle.dump(matDict, dataFile, pickle.HIGHEST_PROTOCOL)
+            dataFile.close()
 
             saver.save(sess,'./train_model_checkpoint/export-model')
             sess.close()

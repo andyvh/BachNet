@@ -1,28 +1,19 @@
-# # state matrix returns all data in a dataset into a hashmap of state matrices
-# # need a way to return a state matrix back into a midi file
-# # using python 2.7 as a script, takes hashmap structure and writes it to data.txt,
-# #   which is then ported into main.py and interpreted in 3.x
+
 import numpy
 import midi
 import json
 import os
+import pickle
 
 import time as timet
 
-# def DictToStateMatrix(matDict):
-#     keys = matDict.keys()
-#
-#     for key in keys:
-#         StateMatrix = matDict.get(key)
-#         StateMatrixtoMidi(StateMatrix)
 def findKeys(StateMatrix):
     print(StateMatrix.keys())
 
 def StateMatrixtoMidi(StateMatrix):
-    key = StateMatrix.keys()
-    print(StateMatrix.keys())
+    key = list(StateMatrix.keys())
+    print(key)
     StateMatrix = numpy.asarray(StateMatrix[key[0]])
-    # StateMatrix = numpy.asarray(StateMatrix[0])
 
     total_notes = 128
     tick_scale = 55
@@ -70,7 +61,7 @@ def StateMatrixtoMidi(StateMatrix):
     eot = midi.EndOfTrackEvent(tick=len(StateMatrix))
     track.append(eot)
 
-    # print pattern
+    print(pattern)
 
     localtime   = timet.localtime()
     timeString  = timet.strftime("%m-%d %H:%M:%S", localtime)
@@ -79,15 +70,25 @@ def StateMatrixtoMidi(StateMatrix):
     os.rename("./%s" % (name), "./Midis/%s" % (name))
 
 def main():
-    DataFile = open("StateMatrixData/dataJSON.json", "r")
-    StateMatrix = json.load(DataFile)
-    DataFile.close()
+    # DataFile = open("StateMatrixData/dataJSON.json", "r")
+    # StateMatrix = json.load(DataFile)
+    # DataFile.close()
+
+    datafile = open("StateMatrixData/newSongDict.txt", "rb")
+    StateMatrix = pickle.load(datafile)
+    datafile.close()
+
     StateMatrixtoMidi(StateMatrix)
 
 
 if __name__ == '__main__':
-    DataFile = open("StateMatrixData/dataJSON.json", "r")
-    StateMatrix = json.load(DataFile)
-    DataFile.close()
+    # DataFile = open("StateMatrixData/dataJSON.json", "r")
+    # StateMatrix = json.load(DataFile)
+    # DataFile.close()
+
+    datafile = open( "StateMatrixData/songDict.txt", "rb" )
+    StateMatrix = pickle.load(datafile)
+    datafile.close()
+
     StateMatrixtoMidi(StateMatrix)
     # findKeys(StateMatrix)
